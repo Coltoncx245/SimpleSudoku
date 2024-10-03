@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 // ************ ERROR HANDLING ************
 struct CommandLineException

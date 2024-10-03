@@ -1,9 +1,7 @@
-#include <iostream>
-#include <fstream>
 #include "util.h"
 
 // ************ FUNCTION DECLARATIONS ************
-bool solve(int (*grid)[9][9]);
+bool solve(int (*grid)[9][9], int* backtracks);
 void print(int (*grid)[9][9]);
 bool findNextEmpty(int (*grid)[9][9], int* r, int* c);
 
@@ -21,20 +19,31 @@ int main(int argc, char* argv[])
 
     int grid[9][9];
     readPuzzle(&grid, filename);
+    
+    // Used for benchmarking
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::milliseconds;
+    int backtracks = 0;
 
-    if (solve(&grid))
+    auto t1 = high_resolution_clock::now();
+    if (solve(&grid, &backtracks))
     {
         std::cout << "Solution found:" << std::endl;
         print(&grid);
     }
     else {std::cout << "No solutions found" << std::endl;}
+    auto t2 = high_resolution_clock::now();
+    duration<double, std::milli> ms_double = t2 - t1;
+    std::cout << "Process finished in " << ms_double.count() << "ms with " << backtracks << " backtracks." << std::endl;
     return 0;
 }
 
 
 // ************ FUNCTION DEFINITIONS ************
 
-bool solve(int (*grid)[9][9])
+bool solve(int (*grid)[9][9], int* backtracks)
 {
     int r = 0, c = 0;
 
@@ -51,11 +60,14 @@ bool solve(int (*grid)[9][9])
             // do
             (*grid)[r][c]=i;
             // recurse
-            if(solve(grid)){return 1;}
+            if(solve(grid, backtracks)){return 1;}
             // undo
             (*grid)[r][c]=0;
+            
         }
     }
+    // increment the number of backtracks for performance tracking
+    (*backtracks)++;
     return 0;
 }
 

@@ -16,3 +16,7 @@ and this project adheres to *[Semantic Versioning](https://semver.org/spec/v2.0.
     - ```isValid()```
     - ```readPuzzle()```
 - Error handling for command line arguments and existence of input file
+
+## [1.0.1] - 2024-10-03
+### Added
+- Process run time and number of backtracks recorded for measuring performance
